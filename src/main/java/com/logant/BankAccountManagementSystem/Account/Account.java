@@ -1,8 +1,6 @@
 package com.logant.BankAccountManagementSystem.Account;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logant.BankAccountManagementSystem.Transaction.Transaction;
 import com.logant.BankAccountManagementSystem.User.User;
 import com.logant.BankAccountManagementSystem.Enum.AccountType;
@@ -16,9 +14,9 @@ import java.util.List;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name="accounts")
 public class Account {
     @Id

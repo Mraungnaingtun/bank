@@ -1,7 +1,5 @@
 package com.logant.BankAccountManagementSystem.User;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logant.BankAccountManagementSystem.Account.Account;
 import jakarta.persistence.*;

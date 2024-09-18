@@ -4,7 +4,6 @@ import com.logant.BankAccountManagementSystem.Account.DTO.TransferRequestDTO;
 import com.logant.BankAccountManagementSystem.Transaction.Transaction;
 import com.logant.BankAccountManagementSystem.Transaction.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

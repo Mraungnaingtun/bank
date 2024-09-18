@@ -1,6 +1,6 @@
 package com.logant.BankAccountManagementSystem.Transaction;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logant.BankAccountManagementSystem.Account.Account;
 import com.logant.BankAccountManagementSystem.Enum.TransactionType;

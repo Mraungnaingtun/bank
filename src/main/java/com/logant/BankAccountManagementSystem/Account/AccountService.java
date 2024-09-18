@@ -4,12 +4,17 @@ import com.logant.BankAccountManagementSystem.Transaction.Transaction;
 import com.logant.BankAccountManagementSystem.Transaction.TransactionRepository;
 import com.logant.BankAccountManagementSystem.Enum.TransactionType;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
 @Service
 public class AccountService {
 

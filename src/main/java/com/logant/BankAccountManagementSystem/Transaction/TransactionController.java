@@ -1,7 +1,5 @@
 package com.logant.BankAccountManagementSystem.Transaction;
 
-import com.logant.BankAccountManagementSystem.Account.Account;
-import com.logant.BankAccountManagementSystem.Account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
