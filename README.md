@@ -17,7 +17,7 @@ This project was developed using **Test Driven Development (TDD)** principles, e
 
 ### Prerequisites
 
-- Java (version 11 or higher)
+- Java (version 17 or higher)
 - Maven (for building the project)
 
 ### Installation
