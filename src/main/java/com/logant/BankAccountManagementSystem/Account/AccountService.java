@@ -108,8 +108,8 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public List<Account> getAllAccountsWithUsers() {
-        return accountRepository.findAllWithUsers();
-    }
+//    public List<Account> getAllAccountsWithUsers() {
+//        return accountRepository.findAllWithUsers();
+//    }
 
 }

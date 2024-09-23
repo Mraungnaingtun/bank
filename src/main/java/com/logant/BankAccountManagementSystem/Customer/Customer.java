@@ -1,4 +1,4 @@
-package com.logant.BankAccountManagementSystem.User;
+package com.logant.BankAccountManagementSystem.Customer;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logant.BankAccountManagementSystem.Account.Account;
@@ -15,8 +15,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="users")
-public class User {
+@Table(name="customer")
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,8 +24,8 @@ public class User {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonManagedReference("customer-account")
     private List<Account> accounts;
 
 }

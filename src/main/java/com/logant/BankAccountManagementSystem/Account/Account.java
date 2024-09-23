@@ -1,8 +1,9 @@
 package com.logant.BankAccountManagementSystem.Account;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.logant.BankAccountManagementSystem.Transaction.Transaction;
-import com.logant.BankAccountManagementSystem.User.User;
+import com.logant.BankAccountManagementSystem.Customer.Customer;
 import com.logant.BankAccountManagementSystem.Enum.AccountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,11 +30,11 @@ public class Account {
     private AccountType accountType;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private User user;
+    @JoinColumn(name = "customer_id")
+    @JsonBackReference("customer-account")
+    private Customer customer;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference("account-transaction")
     private List<Transaction> transactions;
 }
