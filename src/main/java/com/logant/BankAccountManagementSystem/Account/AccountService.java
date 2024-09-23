@@ -80,7 +80,7 @@ public class AccountService {
     }
 
     // Helper method to find account by id
-    private Account findAccountById(Long accountId) {
+    public Account findAccountById(Long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found."));
     }

@@ -33,15 +33,36 @@ class AccountServiceTest {
                 .accountNumber("123456789")
                 .balance(1000.0)
                 .accountType(AccountType.SAVINGS)
-                .user(null)
+                .customer(null)
                 .build();
         toAccount = Account.builder()
                 .id(2L)
                 .accountNumber("123456789")
                 .balance(2000.0)
                 .accountType(AccountType.SAVINGS)
-                .user(null)
+                .customer(null)
                 .build();
+    }
+
+
+    @Test
+    public  void testsSuccessfulDeposit(){
+        Double deposit_amount = 200.00;
+        System.out.println("Deposit Amount = "+deposit_amount);
+
+        // Arrange
+        when(accountRepository.findById(fromAccount.getId())).thenReturn(Optional.of(fromAccount));
+        Double last_balance = fromAccount.getBalance();
+        System.out.println("Last Balance = "+ last_balance);
+
+        // Act
+        accountService.deposit(fromAccount.getId(),deposit_amount);
+        System.out.println("Balance after deposit = "+ fromAccount.getBalance());
+        // Assert
+        assertEquals(last_balance + deposit_amount, fromAccount.getBalance());
+
+        verify(accountRepository, times(1)).save(fromAccount);
+        verify(transactionRepository, times(1)).save(any(Transaction.class));
     }
 
     @Test
@@ -66,5 +87,8 @@ class AccountServiceTest {
         verify(accountRepository, times(1)).save(toAccount);
         verify(transactionRepository, times(2)).save(any(Transaction.class));
     }
+
+
+
 
 }
