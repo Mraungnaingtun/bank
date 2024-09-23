@@ -4,6 +4,7 @@ A comprehensive Banking Management System that allows users to perform essential
 
 ## Key Features
 
+- **Security**: With latest spring security role base control (access token, refresh token).
 - **Deposit**: Allows users to deposit funds into their account.
 - **Withdraw**: Enables users to withdraw funds from their account.
 - **Transfer**: Supports transferring funds between accounts.
