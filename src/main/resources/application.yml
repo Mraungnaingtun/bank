@@ -10,7 +10,7 @@ spring:
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: create  # or 'create', 'create-drop', depending on your use case
+      ddl-auto: update  # or 'create', 'create-drop', depending on your use case
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
