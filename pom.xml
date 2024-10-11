@@ -100,9 +100,6 @@
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>3.8.1</version> <!-- or your desired version -->
 			<configuration>
-                <image>
-                    <name>bankaccountmanagementsystem</name> <!-- Change to lowercase -->
-                </image>
 				<debug>true</debug>
 				<optimize>false</optimize> <!-- Prevents compiler optimization -->
 				<fork>true</fork> <!-- Ensures proper debugging -->

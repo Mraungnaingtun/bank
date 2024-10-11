@@ -1,9 +1,12 @@
 package com.logant.BankAccountManagementSystem.Account;
 
 import com.logant.BankAccountManagementSystem.Account.DTO.TransferRequestDTO;
+import com.logant.BankAccountManagementSystem.General.MainResponse;
+import com.logant.BankAccountManagementSystem.General.ResponseCode;
 import com.logant.BankAccountManagementSystem.Transaction.Transaction;
 import com.logant.BankAccountManagementSystem.Transaction.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -41,11 +44,12 @@ public class AccountController {
     // Deposit money into an account using Map
     @PreAuthorize("hasAnyAuthority('SCOPE_WRITE')")
     @PostMapping("/deposit")
-    public ResponseEntity<String> deposit(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<MainResponse> deposit(@RequestBody Map<String, Object> request) {
+
         Long accountId = ((Number) request.get("accountId")).longValue();
         Double amount = (Double) request.get("amount");
         accountService.deposit(accountId, amount);
-        return ResponseEntity.ok("Deposit successful");
+        return  MainResponse.buildSuccessResponse(ResponseCode.DEPOSIT_SUCCESSFUL, "This is Data", HttpStatus.CREATED);
     }
 
     // Withdraw money from an account using Map
@@ -58,7 +62,7 @@ public class AccountController {
         return ResponseEntity.ok("Withdrawal successful");
     }
 
-    //using request by dto
+    // using request by dto
     @PreAuthorize("hasAnyAuthority('SCOPE_WRITE')")
     @PostMapping("/transfer")
     public ResponseEntity<String> transfer(@RequestBody TransferRequestDTO transferRequestDTO) {
@@ -67,7 +71,6 @@ public class AccountController {
                 transferRequestDTO.getAmount());
         return ResponseEntity.ok("Transfer successful");
     }
-
 
     // Check the balance of an account
     @PreAuthorize("hasAnyAuthority('SCOPE_WRITE')")
@@ -85,9 +88,9 @@ public class AccountController {
         return ResponseEntity.ok(transactions);
     }
 
-//    @GetMapping("/accounts-with-users")
-//    public List<Account> getAccountsWithUsers() {
-//        return accountService.getAllAccountsWithUsers();
-//    }
+    // @GetMapping("/accounts-with-users")
+    // public List<Account> getAccountsWithUsers() {
+    // return accountService.getAllAccountsWithUsers();
+    // }
 
 }
