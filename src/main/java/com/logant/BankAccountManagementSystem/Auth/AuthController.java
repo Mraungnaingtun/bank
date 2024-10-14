@@ -5,6 +5,7 @@ import com.logant.BankAccountManagementSystem.Auth.dto.LoginRequestDto;
 import com.logant.BankAccountManagementSystem.Auth.dto.UserRegistrationDto;
 import com.logant.BankAccountManagementSystem.General.MainResponse;
 import com.logant.BankAccountManagementSystem.General.ResponseCode;
+import com.logant.BankAccountManagementSystem.Log.LoggingService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -36,11 +37,17 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+
+    @Autowired
+    private LoggingService loggingService;
+
     // -------------------login---------------------------------------------
     @PostMapping("/sign-in")
     public ResponseEntity<MainResponse> authenticateUser(@RequestBody LoginRequestDto loginRequestDto,
             HttpServletResponse response) {
         AuthResponseDto ret = new AuthResponseDto();
+        loggingService.log("INFO", loginRequestDto.getUsername());
+        
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     loginRequestDto.getUsername(), loginRequestDto.getPassword());
