@@ -31,7 +31,7 @@ public class LogoutHandlerService implements LogoutHandler {
 
         final String refreshToken = authHeader.substring(7);
 
-        var storedRefreshToken = refreshTokenRepo.findByRefreshToken(refreshToken)
+        refreshTokenRepo.findByRefreshToken(refreshToken)
                 .map(token->{
                     token.setRevoked(true);
                     refreshTokenRepo.save(token);

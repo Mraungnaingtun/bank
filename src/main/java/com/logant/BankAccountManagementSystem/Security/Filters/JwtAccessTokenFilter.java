@@ -1,8 +1,10 @@
-package com.logant.BankAccountManagementSystem.Security.config.jwtAuth;
+package com.logant.BankAccountManagementSystem.Security.Filters;
 
 
 import com.logant.BankAccountManagementSystem.Security.Enum.TokenType;
 import com.logant.BankAccountManagementSystem.Security.config.RSAKeyRecord;
+import com.logant.BankAccountManagementSystem.Security.config.jwtAuth.JwtTokenUtils;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ public class JwtAccessTokenFilter extends OncePerRequestFilter {
     private final RSAKeyRecord rsaKeyRecord;
     private final JwtTokenUtils jwtTokenUtils;
 
+    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

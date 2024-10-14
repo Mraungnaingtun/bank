@@ -1,9 +1,12 @@
 package com.logant.BankAccountManagementSystem.Account;
 
 import com.logant.BankAccountManagementSystem.Account.DTO.TransferRequestDTO;
+import com.logant.BankAccountManagementSystem.General.MainResponse;
+import com.logant.BankAccountManagementSystem.General.ResponseCode;
 import com.logant.BankAccountManagementSystem.Transaction.Transaction;
 import com.logant.BankAccountManagementSystem.Transaction.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -41,24 +44,37 @@ public class AccountController {
     // Deposit money into an account using Map
     @PreAuthorize("hasAnyAuthority('SCOPE_WRITE')")
     @PostMapping("/deposit")
-    public ResponseEntity<String> deposit(@RequestBody Map<String, Object> request) {
-        Long accountId = ((Number) request.get("accountId")).longValue();
-        Double amount = (Double) request.get("amount");
-        accountService.deposit(accountId, amount);
-        return ResponseEntity.ok("Deposit successful");
+    public ResponseEntity<MainResponse> deposit(@RequestBody Map<String, Object> request) {
+        Transaction ret = new Transaction();
+        try {
+            Long accountId = ((Number) request.get("accountId")).longValue();
+            Double amount = (Double) request.get("amount");
+            ret = accountService.deposit(accountId, amount);
+        } catch (Exception e) {
+            return MainResponse.buildErrorResponse(ResponseCode.SERVER_ERROR, e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return MainResponse.buildSuccessResponse(ResponseCode.SUCCESS, ret, HttpStatus.OK);
     }
 
     // Withdraw money from an account using Map
     @PreAuthorize("hasAnyAuthority('SCOPE_WRITE')")
     @PostMapping("/withdraw")
-    public ResponseEntity<String> withdraw(@RequestBody Map<String, Object> request) {
-        Long accountId = ((Number) request.get("accountId")).longValue();
-        Double amount = (Double) request.get("amount");
-        accountService.withdraw(accountId, amount);
-        return ResponseEntity.ok("Withdrawal successful");
+    public ResponseEntity<MainResponse> withdraw(@RequestBody Map<String, Object> request) {
+
+        Transaction ret = new Transaction();
+        try {
+            Long accountId = ((Number) request.get("accountId")).longValue();
+            Double amount = (Double) request.get("amount");
+            ret = accountService.withdraw(accountId, amount);
+        } catch (Exception e) {
+            return MainResponse.buildErrorResponse(ResponseCode.SERVER_ERROR, e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return MainResponse.buildSuccessResponse(ResponseCode.SUCCESS, ret, HttpStatus.OK);
     }
 
-    //using request by dto
+    // using request by dto
     @PreAuthorize("hasAnyAuthority('SCOPE_WRITE')")
     @PostMapping("/transfer")
     public ResponseEntity<String> transfer(@RequestBody TransferRequestDTO transferRequestDTO) {
@@ -67,7 +83,6 @@ public class AccountController {
                 transferRequestDTO.getAmount());
         return ResponseEntity.ok("Transfer successful");
     }
-
 
     // Check the balance of an account
     @PreAuthorize("hasAnyAuthority('SCOPE_WRITE')")
@@ -84,10 +99,4 @@ public class AccountController {
         List<Transaction> transactions = transactionService.getTransactionsByAccount(accountId);
         return ResponseEntity.ok(transactions);
     }
-
-//    @GetMapping("/accounts-with-users")
-//    public List<Account> getAccountsWithUsers() {
-//        return accountService.getAllAccountsWithUsers();
-//    }
-
 }

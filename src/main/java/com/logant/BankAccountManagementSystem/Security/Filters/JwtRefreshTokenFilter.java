@@ -1,8 +1,10 @@
-package com.logant.BankAccountManagementSystem.Security.config.jwtAuth;
+package com.logant.BankAccountManagementSystem.Security.Filters;
 
 
 import com.logant.BankAccountManagementSystem.Security.Repository.RefreshTokenRepo;
 import com.logant.BankAccountManagementSystem.Security.config.RSAKeyRecord;
+import com.logant.BankAccountManagementSystem.Security.config.jwtAuth.JwtTokenUtils;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,9 +36,9 @@ public class JwtRefreshTokenFilter extends OncePerRequestFilter {
     private final RefreshTokenRepo refreshTokenRepo;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request,
+                                    @SuppressWarnings("null") HttpServletResponse response,
+                                    @SuppressWarnings("null") FilterChain filterChain) throws ServletException, IOException {
 
         try {
             log.info("[JwtRefreshTokenFilter:doFilterInternal] :: Started ");

@@ -1,17 +1,27 @@
 spring:
   main:
     lazy-initialization: true
+  output:
+    ansi:
+      enabled: ALWAYS
   datasource:
-    url: jdbc:postgresql://dpg-crungs5umphs7385c9b0-a.oregon-postgres.render.com/my_postgres_cloud_server
-    username: my_postgres_cloud_server_user 
-    password: 7VEKpIYfZVILq8OZQziGTVL8OivaNooF
+    url: jdbc:postgresql://localhost:5432/BankSystem
+    username: postgres
+    password: 1qaz!QAZ
     driver-class-name: org.postgresql.Driver
+    #-----------cloud-------------------------------------
+    # url: jdbc:postgresql://dpg-crungs5umphs7385c9b0-a.oregon-postgres.render.com/my_postgres_cloud_server
+    # username: my_postgres_cloud_server_user 
+    # password: 7VEKpIYfZVILq8OZQziGTVL8OivaNooF
+    # driver-class-name: org.postgresql.Driver
 
   jpa:
-    show-sql: false
+    show-sql: true
     hibernate:
-      ddl-auto: create  # or 'create', 'create-drop', depending on your use case
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: update  # You can change this to 'update' if needed
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate.connection.isolation: 2  # TRANSACTION_READ_COMMITTED
 
 server:
   port: 8099
@@ -19,3 +29,12 @@ server:
 jwt:
   rsa-private-key: classpath:certs/privateKey.pem
   rsa-public-key: classpath:certs/publicKey.pem
+  access-token:
+    expiration: 15
+  refresh-token:
+    expiration: 100
+
+
+logging:
+  level:
+    org.springframework.security: TRACE

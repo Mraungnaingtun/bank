@@ -2,6 +2,8 @@ package com.logant.BankAccountManagementSystem.Security.config.jwtAuth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -21,12 +23,17 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtTokenGenerator {
 
-
     private final JwtEncoder jwtEncoder;
+    @Value("${jwt.access-token.expiration}")
+    private long accessTokenExpiration;
+
+    @Value("${jwt.refresh-token.expiration}")
+    private long refreshTokenExpiration;
 
     public String generateAccessToken(Authentication authentication) {
 
         log.info("[JwtTokenGenerator:generateAccessToken] Token Creation Started for:{}", authentication.getName());
+        // System.out.println("Access token time" + accessTokenExpiration);
 
         String roles = getRolesOfUser(authentication);
 
@@ -35,7 +42,7 @@ public class JwtTokenGenerator {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("antun")
                 .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plus(5 , ChronoUnit.MINUTES))
+                .expiresAt(Instant.now().plus(accessTokenExpiration, ChronoUnit.MINUTES))
                 .subject(authentication.getName())
                 .claim("scope", permissions)
                 .build();
@@ -43,21 +50,22 @@ public class JwtTokenGenerator {
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
-
     public String generateRefreshToken(Authentication authentication) {
 
         log.info("[JwtTokenGenerator:generateRefreshToken] Token Creation Started for:{}", authentication.getName());
 
+        // System.out.println("Access token time" + refreshTokenExpiration);
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("antun")
                 .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plus(15 , ChronoUnit.DAYS))
+                .expiresAt(Instant.now().plus(refreshTokenExpiration, ChronoUnit.MINUTES))
                 .subject(authentication.getName())
                 .claim("scope", "REFRESH_TOKEN")
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
     private static String getRolesOfUser(Authentication authentication) {
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

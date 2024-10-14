@@ -2,10 +2,10 @@ package com.logant.BankAccountManagementSystem.Security;
 
 
 import com.logant.BankAccountManagementSystem.Security.Service.LogoutHandlerService;
+import com.logant.BankAccountManagementSystem.Security.Filters.JwtAccessTokenFilter;
+import com.logant.BankAccountManagementSystem.Security.Filters.JwtRefreshTokenFilter;
 import com.logant.BankAccountManagementSystem.Security.Repository.RefreshTokenRepo;
 import com.logant.BankAccountManagementSystem.Security.config.RSAKeyRecord;
-import com.logant.BankAccountManagementSystem.Security.config.jwtAuth.JwtAccessTokenFilter;
-import com.logant.BankAccountManagementSystem.Security.config.jwtAuth.JwtRefreshTokenFilter;
 import com.logant.BankAccountManagementSystem.Security.config.jwtAuth.JwtTokenUtils;
 import com.logant.BankAccountManagementSystem.Security.config.user.MyUserDetailsService;
 import com.nimbusds.jose.jwk.JWK;

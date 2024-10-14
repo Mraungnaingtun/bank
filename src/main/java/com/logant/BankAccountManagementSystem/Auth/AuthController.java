@@ -1,8 +1,11 @@
 package com.logant.BankAccountManagementSystem.Auth;
 
-
+import com.logant.BankAccountManagementSystem.Auth.dto.AuthResponseDto;
 import com.logant.BankAccountManagementSystem.Auth.dto.LoginRequestDto;
 import com.logant.BankAccountManagementSystem.Auth.dto.UserRegistrationDto;
+import com.logant.BankAccountManagementSystem.General.MainResponse;
+import com.logant.BankAccountManagementSystem.General.ResponseCode;
+
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,33 +36,72 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    // -------------------login---------------------------------------------
     @PostMapping("/sign-in")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        return ResponseEntity.ok(authService.getJwtTokensAfterAuthentication(authentication, response));
-    }
+    public ResponseEntity<MainResponse> authenticateUser(@RequestBody LoginRequestDto loginRequestDto,
+            HttpServletResponse response) {
+        AuthResponseDto ret = new AuthResponseDto();
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-    @PreAuthorize("hasAuthority('SCOPE_REFRESH_TOKEN')")
-    @PostMapping ("/refresh-token")
-    public ResponseEntity<?> getAccessToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
-        return ResponseEntity.ok(authService.getAccessTokenUsingRefreshToken(authorizationHeader));
-    }
+            ret = authService.getJwtTokensAfterAuthentication(authentication, response);
 
-    @PostMapping("/sign-up")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto userRegistrationDto,
-                                          BindingResult bindingResult, HttpServletResponse httpServletResponse){
-
-        log.info("[AuthController:registerUser]Signup Process Started for user:{}",userRegistrationDto.userName());
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessage = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .toList();
-            log.error("[AuthController:registerUser]Errors in user:{}",errorMessage);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        } catch (Exception e) {
+            if (e.getMessage().equals("Bad credentials")) {
+                return MainResponse.buildErrorResponse(ResponseCode.WRONG_CREDENTIALS, e.getMessage(),
+                        HttpStatus.UNAUTHORIZED);
+            }
+            return MainResponse.buildErrorResponse(ResponseCode.SERVER_ERROR, e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return ResponseEntity.ok(authService.registerUser(userRegistrationDto,httpServletResponse));
+
+        return MainResponse.buildSuccessResponse(ResponseCode.SUCCESS, ret, HttpStatus.OK);
+    }
+
+    // -------------------refresh token---------------------------------------------
+    @PreAuthorize("hasAuthority('SCOPE_REFRESH_TOKEN')")
+    @PostMapping("/refresh-token")
+    public ResponseEntity<MainResponse> getAccessToken(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        AuthResponseDto ret = new AuthResponseDto();
+        try {
+
+            ret = authService.getAccessTokenUsingRefreshToken(authorizationHeader);
+
+        } catch (Exception err) {
+            return MainResponse.buildErrorResponse(ResponseCode.SERVER_ERROR, err.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return MainResponse.buildSuccessResponse(ResponseCode.SUCCESS, ret, HttpStatus.OK);
+    }
+
+    // -------------------register---------------------------------------------
+    @PostMapping("/sign-up")
+    public ResponseEntity<MainResponse> registerUser(@Valid @RequestBody UserRegistrationDto userRegistrationDto,
+            BindingResult bindingResult, HttpServletResponse httpServletResponse) {
+
+        AuthResponseDto ret = new AuthResponseDto();
+        try {
+            log.info("[AuthController:registerUser]Signup Process Started for user:{}", userRegistrationDto.userName());
+
+            if (bindingResult.hasErrors()) {
+                List<String> errorMessage = bindingResult.getAllErrors().stream()
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                        .toList();
+                log.error("[AuthController:registerUser]Errors in user:{}", errorMessage);
+
+                return MainResponse.buildErrorResponse(ResponseCode.SERVER_ERROR, errorMessage.toString(),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            ret = authService.registerUser(userRegistrationDto, httpServletResponse);
+
+        } catch (Exception err) {
+            return MainResponse.buildErrorResponse(ResponseCode.SERVER_ERROR, err.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return MainResponse.buildSuccessResponse(ResponseCode.SUCCESS, ret, HttpStatus.OK);
     }
 }

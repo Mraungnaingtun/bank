@@ -28,7 +28,7 @@ public class AccountService {
 
     // Deposit money into an account
     @Transactional
-    public void deposit(Long accountId, Double amount) {
+    public Transaction deposit(Long accountId, Double amount) {
         Account account = findAccountById(accountId);
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero.");
@@ -36,12 +36,12 @@ public class AccountService {
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
 
-        recordTransaction(account, amount, TransactionType.DEPOSIT);
+        return recordTransaction(account, amount, TransactionType.DEPOSIT);
     }
 
     // Withdraw money from an account
     @Transactional
-    public void withdraw(Long accountId, Double amount) {
+    public Transaction withdraw(Long accountId, Double amount) {
         Account account = findAccountById(accountId);
         if (amount > account.getBalance()) {
             throw new IllegalArgumentException("Insufficient balance.");
@@ -49,7 +49,7 @@ public class AccountService {
         account.setBalance(account.getBalance() - amount);
         accountRepository.save(account);
 
-        recordTransaction(account, amount, TransactionType.WITHDRAWAL);
+        return recordTransaction(account, amount, TransactionType.WITHDRAWAL);
     }
 
     // Transfer money between accounts
@@ -86,13 +86,13 @@ public class AccountService {
     }
 
     // Helper method to record a transaction
-    private void recordTransaction(Account account, Double amount, TransactionType type) {
+    private Transaction recordTransaction(Account account, Double amount, TransactionType type) {
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setAmount(amount);
         transaction.setType(type);
         transaction.setTimestamp(LocalDateTime.now());
-        transactionRepository.save(transaction);
+        return transactionRepository.save(transaction);
     }
 
     public Account createAccount(Account account) {
