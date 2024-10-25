@@ -9,7 +9,6 @@ import com.logant.BankAccountManagementSystem.Log.LoggingService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -26,9 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4202")
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("auth")
 public class AuthController {
 
     @Autowired
